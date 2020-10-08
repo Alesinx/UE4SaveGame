@@ -1,14 +1,15 @@
-#include "TestSaveObj.h"
+
+#include "SaveGame/Public/SaveableObject.h"
 #include "Serialization/MemoryReader.h"
 #include "Serialization/MemoryWriter.h"
 
-ATestSaveObj::ATestSaveObj(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+ASaveableObject::ASaveableObject(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 
 }
 
 
-FSaveDataRecord ATestSaveObj::SaveToRecord()
+FSaveDataRecord ASaveableObject::SaveToRecord()
 {
 	FSaveDataRecord NewRecord = FSaveDataRecord();
 	NewRecord.ActorClass = GetClass();
@@ -59,13 +60,13 @@ FSaveDataRecord ATestSaveObj::SaveToRecord()
 	return NewRecord;
 }
 
-void ATestSaveObj::LoadFromRecord(FSaveDataRecord Record)
+void ASaveableObject::LoadFromRecord(FSaveDataRecord Record)
 {
 	FMemoryReader Reader = FMemoryReader(Record.Data);
 	Serialize(Reader);
 }
 
-void ATestSaveObj::RelinkPointers(TMap<uint32, AActor*> ObjectDB, TArray<uint32> OIDList)
+void ASaveableObject::RelinkPointers(TMap<uint32, AActor*> ObjectDB, TArray<uint32> OIDList)
 {
 	//////////////////////////////////////
 	//SAMPLE FOR FIXING UP POINTER LINKS//
@@ -80,7 +81,7 @@ void ATestSaveObj::RelinkPointers(TMap<uint32, AActor*> ObjectDB, TArray<uint32>
 			//do an OID lookup so we can match pointers
 			if (OIDList[i] != 0)
 			{
-				TestList.Add(Cast<ATestSaveObj>(ObjectDB[OIDList[i]]));
+				TestList.Add(Cast<ASaveableObject>(ObjectDB[OIDList[i]]));
 			}
 			else
 			{
@@ -97,7 +98,7 @@ void ATestSaveObj::RelinkPointers(TMap<uint32, AActor*> ObjectDB, TArray<uint32>
 		uint32 uid = OIDList[++i];
 		if (uid != 0)
 		{
-			OtherObj = Cast<ATestSaveObj>(ObjectDB[uid]);
+			OtherObj = Cast<ASaveableObject>(ObjectDB[uid]);
 		}
 		else
 		{

@@ -2,29 +2,29 @@
 #include "GameFramework/Actor.h"
 #include "ISaveable.h"
 
-#include "TestSaveObj.generated.h"
+#include "SaveableObject.generated.h"
 
 UCLASS()
-class ATestSaveObj : public AActor, public ISaveable
+class ASaveableObject : public AActor, public ISaveable
 {
 	GENERATED_BODY()
 
 public:
 
-	ATestSaveObj(const FObjectInitializer& ObjectInitializer);
+	ASaveableObject(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame, Category = "Test")
 	float SaveMeFloat = 0;
 
 	//Testing the de/serialization of a pointer (causes a crash if you mark "savegame")
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Test")
-	ATestSaveObj* OtherObj = NULL;
+	ASaveableObject* OtherObj = NULL;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Test")
-	TArray<ATestSaveObj*> TestList;
+	TArray<ASaveableObject*> TestList;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Test")
-	TSoftClassPtr<ATestSaveObj> SavePtr = NULL;
+	TSoftClassPtr<ASaveableObject> SavePtr = NULL;
 	//void Serialize(FArchive& Ar) override;
 
 	//ISaveable Interface implementation:

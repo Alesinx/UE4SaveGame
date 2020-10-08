@@ -2,7 +2,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Serialization/MemoryReader.h"
 #include "Serialization/MemoryWriter.h"
-#include "TestSaveObj.h"
+#include "SaveableObject.h"
 #include "MySaveGame.h"
 
 ACustomGameState::ACustomGameState(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -45,7 +45,7 @@ void ACustomGameState::SaveGameState()
 
 	//We're going to save all of our dynamic actors via their base class. Any inheriting actors will get their properties
 	//saved. This will populate ObjectDB with a list of all objects of the given class.
-	SaveActors(ATestSaveObj::StaticClass());
+	SaveActors(ASaveableObject::StaticClass());
 
 
 	//We're going to be writing to this block of binary data!
@@ -71,7 +71,7 @@ void ACustomGameState::LoadGameState()
 {
 
 	//destroy everything dynamic in the game world
-	ClearAllActors(ATestSaveObj::StaticClass());
+	ClearAllActors(ASaveableObject::StaticClass());
 
 	//sanity check
 	ObjectRecords.Empty();
